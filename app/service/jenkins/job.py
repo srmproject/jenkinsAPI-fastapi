@@ -1,5 +1,3 @@
-
-
 from app.core.config import Settings
 from jenkinsapi.jenkins import Jenkins
 from app.core.log import logger
