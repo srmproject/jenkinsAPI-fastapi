@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.core.config import Settings, get_settings
+from app.core.config import GlobalSettings, get_settings
 from app.service.jenkins import job
 
 router = APIRouter(
@@ -10,7 +10,7 @@ router = APIRouter(
 
 
 @router.get("/jobs")
-async def info(settings: Settings = Depends(get_settings)):
+async def info(settings: GlobalSettings = Depends(get_settings)):
     joblists = job.getJobs(settings)
 
     return {

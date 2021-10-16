@@ -1,10 +1,10 @@
-from app.core.config import Settings
+from app.core.config import GlobalSettings
 from jenkinsapi.jenkins import Jenkins
 from app.core.log import logger
 from app.core.exceptions import jenkins
 
 
-def getJobs(settgins: Settings):
+def getJobs(settgins: GlobalSettings):
     jenkins_host = settgins.jenkins_host
     jenkins_user = settgins.jenkins_user
     jenkins_password = settgins.jenkins_password
