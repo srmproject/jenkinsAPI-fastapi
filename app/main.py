@@ -11,9 +11,7 @@ app.include_router(jenkinsrouter)
 
 origins = [
     "http://localhost",
-    "http://localhost:8080",
-    "http://srm.choicloudlab.com",
-    "https://srm.choicloudlab.com",
+    "http://localhost:8080"
 ]
 
 app.add_middleware(

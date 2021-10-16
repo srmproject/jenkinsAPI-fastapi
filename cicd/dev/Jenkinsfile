@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "srm-dev-jenkinsapi-fastapi"
+        NAMESPACE = "srm"
+        DOCKER_IMAGE = "srm-dev-jenkinsapi-fastapi"
+        TAG = "${BUILD_NUMBER}"
+        DOCKER_IMAGENAME = "${DOCKER_IMAGE}:${TAG}"
+        SVCTYPE = "NodePort"
+        NODEPORT = "31000"
+        FERNET_KEY = credentials('SRM_DEV_FERNET')
+        MODE = "dev"
+    }
+
+    stages {
+        stage('docker build&push'){
+            steps{
+                sh 'rm -rf ./Dockerfile Jenkinsfile charts'
+                sh 'cp -rf cicd/dev/* ./'
+                withCredentials([string(credentialsId: 'dockerID', variable: 'dockerID')]) {
+                    script{
+                        sh 'docker build -t ${dockerID}/${DOCKER_IMAGENAME} .'
+                        withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'dockerpassword', usernameVariable: 'dockeruser')]) {
+                            sh 'docker login -u ${dockeruser} -p ${dockerpassword}'
+                            sh 'docker push ${dockerID}/${DOCKER_IMAGENAME}'
+                        }
+                    }
+                }
+            }
+        }
+        stage('deploy'){
+            steps{
+                withCredentials([string(credentialsId: 'dockerID', variable: 'dockerID')]) {
+                    sh 'sed -i "s/__IMAGENAME__/${dockerID}\\/${DOCKER_IMAGE}/g" charts/values.yaml'
+                    sh 'sed -i "s/__TAGNAME__/${TAG}/g" charts/values.yaml'
+                    sh 'sed -i "s/__FERNET_KEY__/${FERNET_KEY}/g" charts/values.yaml'
+                    sh 'sed -i "s/__SVCTYPE__/${SVCTYPE}/g" charts/values.yaml'
+                    sh 'sed -i "s/__NODEPORT__/${NODEPORT}/g" charts/values.yaml'
+                    sh 'sed -i "s/__MODE__/${MODE}/g" charts/values.yaml'
+                    sh "helm upgrade --install --namespace ${NAMESPACE} ${APP_NAME} ./charts"
+                }
+            }
+        }
+    }
+}
