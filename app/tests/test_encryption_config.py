@@ -3,8 +3,10 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 import base64
 import os
+import pytest
 
 
+@pytest.mark.skip
 def test_encode():
     '''
     데이터 암호화&복호화 테스트
@@ -24,6 +26,7 @@ def test_encode():
     print("decrypted string: ", decMessage)
 
 
+@pytest.mark.skip
 def test_encryption():
     '''
     데이터 복호화 테스트
@@ -39,6 +42,7 @@ def test_encryption():
     print("original string: ", encMessage)
 
 
+@pytest.mark.skip
 def test_decryption():
     '''
     데이터 복호화 테스트
