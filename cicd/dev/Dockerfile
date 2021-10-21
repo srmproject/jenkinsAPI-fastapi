@@ -1,4 +1,3 @@
-
 FROM python:3.7.2-alpine AS builder
 
 ARG USER=fastapi
@@ -18,5 +17,5 @@ RUN pip install --upgrade pip \
     && pip install -r $USERHOME/app/requirements.txt
 
 USER $USER
-WORKDIR $USERHOME
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+WORKDIR $USERHOME/app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
