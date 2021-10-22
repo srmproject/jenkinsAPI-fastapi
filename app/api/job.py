@@ -38,9 +38,10 @@ async def info(request_trigger_dto: dto.JenkinsTriggerDTO, settings: GlobalSetti
     logger.info("----------------- jenkins job trigger API 호출 -----------------------")
     logger.info(f"요청정보 -> {request_trigger_dto.json()}")
 
-    job.triggerJob(request_trigger_dto, settings)
+    build_id = job.triggerJob(request_trigger_dto, settings)
 
-    logger.info("----------------- jenkins job trigger API 호출 -----------------------")
+    logger.info("----------------- jenkins job trigger API 호출종료 -----------------------")
+
     return {
-        "done"
+        "build_id": build_id
     }
