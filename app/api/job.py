@@ -36,7 +36,7 @@ async def info(settings: GlobalSettings = Depends(get_settings)):
 async def info(request_trigger_dto: dto.JenkinsTriggerDTO, settings: GlobalSettings = Depends(get_settings)):
     '''jenkins job trigger'''
     logger.info("----------------- jenkins job trigger API 호출 -----------------------")
-    logger.info(f"요청정보 -> {request_trigger_dto.json()}")
+    logger.info(f"요청정보 -> {request_trigger_dto.jenkins_url}")
 
     build_id = job.triggerJob(request_trigger_dto, settings)
 
