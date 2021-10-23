@@ -43,3 +43,16 @@ async def validation_exception_handler(request, exc):
         status_code=500,
         content=jsonable_encoder({"error": "jekins서버 요청 실패"})
     )
+
+@app.exception_handler(jenkinsexception.NotExistBuildItem)
+async def validation_exception_handler(request, exc: jenkinsexception.NotExistBuildItem):
+    '''jenkins build_id조회 실패'''
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=jsonable_encoder(
+            {
+                "error": exc.errors,
+                "detail": exc.detail
+            }
+        )
+    )
